@@ -104,7 +104,3 @@ CRDT 的正式一致性模型。 它需要收敛（见上文）和最终交付�
 A special object used in some CRDTs to indicate that a value is absent (e.g. because it has been deleted). Tombstones may increase the memory consumption of a CRDT, as they continue to exist even if the corresponding data has been deleted at the application level. There are algorithms for garbage-collecting tombstones and freeing their memory.
 
 某些 CRDT 中使用的特殊对象，用于指示值不存在（例如，因为它已被删除）。 Tombstones 可能会增加 CRDT 的内存消耗，因为即使在应用程序级别删除了相应的数据，它们也会继续存在。 有一些算法用于垃圾收集墓碑并释放它们的内存。
-
-**词汇：**
-
-Eventual adj 最终的
