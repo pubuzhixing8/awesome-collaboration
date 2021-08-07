@@ -9,11 +9,15 @@ TinyMCE   [explained](https://www.tiny.cloud/blog/real-time-collaborative-editin
 
 TinyMCE 解释了他们通过 E2E 加密实现 OT 所必须做的一切。 有人可以告诉我这里发布的解决方案是否符合该目标？ 非常感谢你的帮助！
 
+---
+
 TheSpyder commented（TheSpyder 是 Slate 的维护者，TinyMCE开源富文本编辑的核心开发者，在调研基于Slate的协同编辑时选择了OT，并发表了两篇相关的说明文章）
 
 Not really. It's a lot easier to do E2E with CRDT, but I don't think any of those frameworks offer it today. We made it hard for ourselves by deciding to go the OT route - and then add E2E which I don't believe any other OT-based editors offer - but we're really happy with the result.
 
 并不真地。 使用 CRDT 进行 E2E 会容易得多，但我认为今天这些框架中没有任何一个提供它。 我们决定走 OT 路线，这让我们自己很难过——然后添加 E2E，我不相信任何其他基于 OT 的编辑会提供这种服务——但我们对结果非常满意。
+
+---
 
 dmonad commented （dmonad 是 Yjs 的创作者，Yjs 是一个 CRDT 的实现框架，提供了实时协同编辑的核心实现，非常强大）
 
@@ -21,11 +25,15 @@ Both Skiff and Serenity Notes built E2E note-taking apps with the Yjs CRDT. The 
 
 Skiff 和   [Serenity Notes](https://github.com/SerenityNotes/serenity-notes-backend)   都使用 Yjs CRDT 构建了 E2E 笔记应用程序。 后者现在是开源的，可能会提供一个很好的起点。
 
+---
+
 german-jablo commented
 
 Thanks to both of you. I'm going to review those two tools you mention. I am more interested in OT than in CRDT because it preserves the intention better. Although as far as I know TinyMCE is the only OT with E2EE, and I am still not in a position to pay its price.
 
 感谢你们俩。 我将回顾你提到的这两个工具。 我对 OT 比对 CRDT 更感兴趣，因为它更好地保留了意图。 虽然据我所知 TinyMCE 是唯一一个带 E2EE 的 OT，我仍然无法支付它的价格。
+
+---
 
 dmonad commented
 
@@ -34,6 +42,8 @@ dmonad commented
 I can say with some authority that this is not the case. OT has other advantages, but intention-preservation is not something that OT does particularly well.
 
 我可以权威地说，事实并非如此。 OT 还有其他优点，但意图保存并不是 OT 做得特别好的。
+
+---
 
 german-jablo commented
 
@@ -55,6 +65,8 @@ Were those the advantages of OT you were referring to?
 然而，让我感到困惑的是，有人说它比 OT 更快/更高效，而其他人则不然。
 
 那些是你所指的 OT 的优势吗？
+
+---
 
 LionsAd commented（这个人通俗的解释了 OT 和 CRDT 的区别）
 
@@ -124,11 +136,15 @@ OT 和 CRDT 最终是等效的方式，实际上可以相互转换（一篇论�
 
 希望有帮助！
 
+---
+
 mitar commented
 
 There is also a middle ground:   [https://github.com/campadrenalin/ConcurrenTree](https://github.com/campadrenalin/ConcurrenTree)  
 
 还有一个中间立场：  [https://github.com/campadrenalin/ConcurrenTree](https://github.com/campadrenalin/ConcurrenTree)  
+
+---
 
 TheSpyder commented
 
@@ -153,6 +169,8 @@ It is a big deal, and TinyMCE encryption is done at the operation level. Open up
 
 这是一个大问题，TinyMCE 加密是在操作级别完成的。 打开我们的演示并监控 websocket 连接 - 仅发送和接收少量数据。
 
+---
+
 german-jablo commented
 
 I appreciate everyone's contribution. @TheSpyder What you are saying sounds like the holy grail of the RTC. From what little I understand, I think that the solution TinyMCE is working on is the best on the market in RTC, be it OT or CRDT. I think not many appreciate it because   [the research you did](https://www.tiny.cloud/blog/real-time-collaboration-end-to-end-encryption/)   is very technical.
@@ -164,6 +182,8 @@ By the way, do you have plans to integrate RTC in the core version?
 如果你能向像我这样笨手笨脚的人发布你使用的法国论文的基础知识以及你如何结合 Jupiter / Soct5 来实现结果，那就太好了。
 
 顺便问一下，你们有计划在核心版本中集成RTC吗？
+
+---
 
 TheSpyder commented
 
@@ -184,6 +204,8 @@ Ah. I am not Tim, who wrote that post; I am Andrew, author of the earlier posts.
 That's still TBD. For now, our only announced plan is to include it with our premium offering; it will be cloud-only at launch with an on-prem version available later (we're hoping it will be in beta at launch).
 
 那还是待定。 目前，我们唯一宣布的计划是将其包含在我们的高级产品中； 它将在发布时仅用于云，稍后将提供本地版本（我们希望它在发布时处于测试阶段）。
+
+---
 
 german-jablo commented
 
@@ -209,9 +231,12 @@ For everything else, thank you very much!
 
 同时满足，非常感谢！
 
+---
+
 dmonad commented
 
 @TheSpyder
+
 > For a rich text editor, however, OT offers preservation of intent.
 
 I know what you mean. But no conflict-resolution algorithm that exists can preserve the actual intent of the user because the algorithm doesn't understand what the user wants to do. All conflict-resolution approaches offer different tradeoffs when it comes to intent-preservation. Even CRDTs can offer a high degree of intent-preservation.
@@ -256,11 +281,14 @@ Were those the advantages of OT you were referring to?
 The slate-yjs binding currently doesn't support versions and tracking changes (only y-prosemirror does). CRDTs in general don't have to consume much more memory than OT (although some certainly do). It's part of the same fallacy that @TheSpyder ran into. They looked at a single bad implementation and judged that all implementations consume too much memory. Yjs has excellent performance metrics even for huge documents. You can write the Bible into a Yjs document while using less than 5MB of ram.
 
 slate-yjs 绑定当前不支持版本和跟踪更改（只有 y-prosemirror 支持）。 通常，CRDT 不必比 OT 消耗更多的内存（尽管有些确实如此）。 这是 @TheSpyder 遇到的同样谬论的一部分。 他们查看了一个糟糕的实现，并判断所有实现都消耗了太多内存。 即使对于大型文档，Yjs 也具有出色的性能指标。 您可以使用不到 5MB 的内存将圣经写入 Yjs 文档。
+
 ---
 
 Just to be clear. I have nothing against OT. Let's just stop with these pointless debates of citing papers from researchers that only want to popularize their approach. If you can't reproduce a "bad behavior" in a specific implementation, then you shouldn't make an argument that a certain thing is not possible. If OT works for you, that's good for you. Keep using it.
 
 只是要清楚。 我不反对OT。 让我们停止这些关于引用研究人员的论文的毫无意义的辩论，他们只想普及他们的方法。 如果您无法在特定实现中重现“不良行为”，那么您不应该争论某件事是不可能的。 如果 OT 对你有用，那对你有好处。 继续使用它。
+
+---
 
 TheSpyder commented
 
@@ -278,11 +306,15 @@ This conversation is about Slate. Slate has a much more flexible document model,
 
 [https://www.loom.com/share/1450a0c84f9b4cf58b4aedec6a0cc00a](https://www.loom.com/share/1450a0c84f9b4cf58b4aedec6a0cc00a)  
 
+---
+
 dmonad commented
 
 You are committing the same fallacy again. Just because you see one counter-example, you are judging that this is an inherent problem. I'm familiar with the Slate data model. Yjs has data types that enable you to linearize the content, similarly to how you do it. Slate-yjs just doesn't use this feature yet. This is not a hard problem to solve, as it can be seen on hand of numerous complex editor bindings that don't show the same behavior. OT doesn't have inherently better intention-preservation than CRDTs. This is just a wrong statement to make.
 
 你又犯了同样的谬论。 仅仅因为你看到一个反例，你就判断这是一个固有的问题。 我熟悉 Slate 数据模型。 Yjs 具有使您能够线性化内容的数据类型，这与您的做法类似。 Slate-yjs 还没有使用这个功能。 这不是一个很难解决的问题，因为可以在众多复杂的编辑器绑定中看到，这些绑定不显示相同的行为。 OT 在本质上并不比 CRDT 具有更好的意图保留。 这只是一个错误的陈述。
+
+---
 
 TheSpyder commented
 
@@ -290,11 +322,15 @@ And you seem to have missed the conclusion of my article. If slate-yjs can be th
 
 你似乎错过了我文章的结论。 如果 slate-yjs 可以那么好，请通过引导它到达那里来帮助这个社区。 我会尽我所能提供帮助。 如果 TinyMCE 可以将 yjs 连接到我们的 Slate 模型而不是我们的自定义 OT 解决方案，那将使我的生活更轻松:)
 
+---
+
 BitPhinix commented
 
 @dmonad I'm really curious on how you would go about linearizing the content. Could you share some pointers?
 
 我真的很好奇你将如何线性化内容。 你能分享一些点吗？
+
+---
 
 dmonad commented
 Sure, I'm happy to help. In order to solve the split-node problem on text-nodes you can make use of the formatting attributes.
@@ -357,7 +393,10 @@ In order to solve the split-node scenario that Andrew described, you just need t
 @TheSpyder That would be great :) Let me know when you need help. For Yjs-specific discussions, I'm also available on the discussion board   [https://discuss.yjs.dev/](https://discuss.yjs.dev/)  
 那太好了 :) 当您需要帮助时请告诉我。 对于特定于 Yjs 的讨论，我也可以在讨论板上找到   [https://discuss.yjs.dev/](https://discuss.yjs.dev/)  
 
+---
+
 BrentFarese commented
+
 @dmonad and @TheSpyder or anyone else on this thread. We use Slate for   [Aline](https://www.aline.co/)   and are going to get to collaborative this year for sure. As with everyone, we have looked at OT vs. CRDT. YJS looks very interesting and we have considered using it.
 
 We would definitely sponsor some open source work to improve official YJS-Slate bindings that would help the community (and allow us to use the bindings for Aline). We might be able to commit some resources ourselves in a couple of months too.
@@ -365,6 +404,7 @@ We would definitely sponsor some open source work to improve official YJS-Slate 
 Is anyone interested in participating/co-sponsoring that type of work? I think it could be valuable to both Slate and YJS to extend the reach of both projects. @dmonad have you done anything like that in the past?
 
 Thanks!
+
 
 @dmonad 和 @TheSpyder 或此Issue上的任何其他人。 我们为   [Aline](https://www.aline.co/)   使用 Slate，今年肯定会进行协作。 与所有人一样，我们已经研究了 OT 与 CRDT。 YJS 看起来很有趣，我们已经考虑使用它。
 
@@ -374,6 +414,7 @@ Thanks!
 
 谢谢！
 
+---
 
 BrentFarese commented
 
@@ -381,6 +422,7 @@ Can we also list Slate bindings in YJS docs (maybe designate as WIP if they're n
 
 我们是否还可以在 YJS 文档中列出 Slate 绑定（如果尚未准备好，可以指定为 WIP）？
 
+---
 
 dmonad commented
 
@@ -400,6 +442,8 @@ Yeah, I thought I already added it. Will do it in a bit.
 
 是的，我以为我已经添加了它。 一会就搞定。
 
+---
+
 BitPhinix commented
 
 Thanks @dmonad! Opening a slate-yjs open collective project would be really helpful indeed.
@@ -410,12 +454,15 @@ I'd be happy to work on improving the current slate-yjs binding
 
 我很乐意改进当前的 slate-yjs 绑定
 
+---
+
 BrentFarese commented
 
 @dmonad and/or @BitPhinix let me know the link to the open collective when set up and we would be glad to contribute.
 
 @dmonad 和/或 @BitPhinix 在设置时让我知道开放集体的链接，我们很乐意做出贡献。
 
+---
 
 hanspagel commented
 
@@ -427,6 +474,7 @@ I’ve just created a slate-yjs project:   [https://opencollective.com/y-collect
 
 我刚刚创建了一个 slate-yjs 项目：https://opencollective.com/y-collective/projects/slate-yjs 换句话说，它是开放的，可以收集捐款。 无论如何，我与@BitPhinix 保持联系，因此我将与他讨论所有进一步的细节，但这可能超出了本问题的范围。 如果你们中有人想私下联系，我的收件箱是开放的：humans@tiptap.dev。 很高兴将每个人与每个人联系起来，让 Yjs 生态系统每天都变得更好。 ✌️
 
+---
 
 TheSpyder 的两篇文章链接：
 
