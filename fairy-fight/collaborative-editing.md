@@ -3,13 +3,13 @@
 
 Issue 原始链接：  [https://github.com/ianstormtaylor/slate/issues/259](https://github.com/ianstormtaylor/slate/issues/259)  
 
-german-jablo commented 8 days ago 2021-6-24（讨论发起者）
+german-jablo commented 2021-6-24（讨论发起者）
 
 TinyMCE   [explained](https://www.tiny.cloud/blog/real-time-collaborative-editing-slate-js/)   everything they had to do to achieve an OT with E2E encryption. Could someone please tell me if the solutions posted here meet that goal? Thank you very much for the help!
 
 TinyMCE 解释了他们通过 E2E 加密实现 OT 所必须做的一切。 有人可以告诉我这里发布的解决方案是否符合该目标？ 非常感谢你的帮助！
 
-TheSpyder commented 7 days ago（TheSpyder 是 Slate 的维护者，TinyMCE开源富文本编辑的核心开发者，在调研基于Slate的协同编辑时选择了OT，并发表了两篇相关的说明文章）
+TheSpyder commented（TheSpyder 是 Slate 的维护者，TinyMCE开源富文本编辑的核心开发者，在调研基于Slate的协同编辑时选择了OT，并发表了两篇相关的说明文章）
 
 Not really. It's a lot easier to do E2E with CRDT, but I don't think any of those frameworks offer it today. We made it hard for ourselves by deciding to go the OT route - and then add E2E which I don't believe any other OT-based editors offer - but we're really happy with the result.
 
