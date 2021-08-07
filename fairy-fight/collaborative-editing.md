@@ -282,7 +282,6 @@ The slate-yjs binding currently doesn't support versions and tracking changes (o
 
 slate-yjs 绑定当前不支持版本和跟踪更改（只有 y-prosemirror 支持）。 通常，CRDT 不必比 OT 消耗更多的内存（尽管有些确实如此）。 这是 @TheSpyder 遇到的同样谬论的一部分。 他们查看了一个糟糕的实现，并判断所有实现都消耗了太多内存。 即使对于大型文档，Yjs 也具有出色的性能指标。 您可以使用不到 5MB 的内存将圣经写入 Yjs 文档。
 
----
 
 Just to be clear. I have nothing against OT. Let's just stop with these pointless debates of citing papers from researchers that only want to popularize their approach. If you can't reproduce a "bad behavior" in a specific implementation, then you shouldn't make an argument that a certain thing is not possible. If OT works for you, that's good for you. Keep using it.
 
