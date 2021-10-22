@@ -1,4 +1,8 @@
 # CRDT 是否适合共享编辑？
+
+> 【 原文链接 】：   [https://blog.kevinjahns.de/are-crdts-suitable-for-shared-editing/](https://blog.kevinjahns.de/are-crdts-suitable-for-shared-editing/)  
+
+
 [CRDT](https://crdt.tech/)通常被誉为构建协作应用程序的 "holy grail"，因为它不需要中央机构来解决同步冲突。它为扩展后端基础设施开辟了新的可能性，也非常适合作为完全不需要服务器的分布式应用程序的数据模型。
 
 但是，一些文本编辑器开发人员反映不要使用它们，因为它们会产生过大的开销。
@@ -37,8 +41,6 @@
 Yjs 是一个使用 CRDT 作为数据模型来构建协作应用程序的框架。它拥有不断增长的扩展生态系统，可以使用不同的编辑器 (   [ProseMirror](https://docs.yjs.dev/ecosystem/editor-bindings/prosemirror)  ,   [Remirror](https://docs.yjs.dev/ecosystem/editor-bindings/remirror)  ,   [Quill](https://docs.yjs.dev/ecosystem/editor-bindings/quill)  ,   [CodeMirror](https://docs.yjs.dev/ecosystem/editor-bindings/codemirror)  , ..)，不同的网络技术(   [WebSocket](https://docs.yjs.dev/ecosystem/connection-provider/y-websocket)  ,   [WebRTC](https://docs.yjs.dev/ecosystem/connection-provider/y-webrtc)  ,   [Hyper](https://docs.yjs.dev/ecosystem/connection-provider/y-hyper)  , ..)，以及不同的持久化层 (   [IndexedDB](https://docs.yjs.dev/ecosystem/database-provider/y-indexeddb)  ,   [LevelDB](https://docs.yjs.dev/ecosystem/database-provider/y-leveldb)  ,   [Redis](https://docs.yjs.dev/ecosystem/database-provider/y-redis)  , ..)来进行协同编辑。大多数协同编辑解决方案与特定的编辑器和特定的后端绑定。使用 Yjs，你可以通过自定义的通信通道，通过点对点 WebRTC 网络，或通过可伸缩的服务器基础设施，使任何受支持的编辑器协作和交换文档更新。我对这个项目的愿景是，你可以简单地使用对你的项目有意义的技术组合你的协作应用程序。
 
 
-![image.png](https://atlas-rc.pingcode.com/files/public/60efae70f6d53d5ee85c518c/origin-url)
-
 
 这不仅仅是一个很酷很典型的业余项目。Yjs 是一种久经考验的技术，被多家公司用来实现协作。我只是在这里提到我的赞助商:
 
@@ -47,8 +49,6 @@ Yjs 是一个使用 CRDT 作为数据模型来构建协作应用程序的框架�
 
 我维护了一组可重复的基准测试，用于比较不同的 CRDT 实现。Yjs 是迄今为止速度最快、编码最高效的基于 web 的 CRDT 实现。在本文中，我经常将   [crdt-benchmarks](https://github.com/dmonad/crdt-benchmarks)    测试库中包含的特定基准测试称为“  [[B1.11]](https://github.com/dmonad/crdt-benchmarks/#b1-no-conflicts)  ”。
 
-![image.png](https://atlas-rc.pingcode.com/files/public/60efb4d9f6d53dff8e5c5197/origin-url)
-
 
 
 ## 数据表示
@@ -56,13 +56,8 @@ Yjs 是一个使用 CRDT 作为数据模型来构建协作应用程序的框架�
 你可能已经熟悉了 CRDT 工作原理的一般概念。如果没有，你想要深入这个未知领域，我推荐这个有趣的互动系列:
 
 > [关于crdt的有趣互动系列](https://lars.hupel.info/topics/crdt/01-intro/)  
-> 
-> ![image.png](https://atlas-rc.pingcode.com/files/public/617244769b49db9877b21eb6/origin-url)
-
 
 > [找到更多与CRDT相关的资源是一个很好的切入点](https://crdt.tech/resources)  
-> 
-> ![image.png](https://atlas-rc.pingcode.com/files/public/617244849b49db70ccb21eb7/origin-url)
  
 
 [Researchgate](https://www.researchgate.net/publication/310212186_Near_Real-Time_Peer-to-Peer_Shared_Editing_on_Extensible_Data_Types)   上提供了描述 Yjs 冲突解决算法 YATA 的概念论文。 这里讨论的概念非常通用，几乎可以扩展到任何 CRDT。
@@ -189,8 +184,6 @@ console.log(`parseTime: ${parseTime} ms`) // => 368.39 ms
 
 我展示了元数据的数量只与产生的变化量有关，与插入的内容量无关。 从一百万次插入的角度来看：键盘压力测试机在每分钟 120 次击键的情况下需要 139 小时才能产生一百万次插入。(  [https://youtu.be/pYXGtxIfprM](https://youtu.be/pYXGtxIfprM)  )
 
-![image.png](https://atlas-rc.pingcode.com/files/public/617244a19b49db1418b21eb8/origin-url)
-
 
 ## 检查内存使用情况
 
@@ -198,8 +191,7 @@ JavaScript 对象的工作方式类似于键值映射。 这意味着每个对�
 
 
 > [V8 如何优化 JavaScript 代码的简要概述](https://blog.sessionstack.com/how-javascript-works-inside-the-v8-engine-5-tips-on-how-to-write-optimized-code-ac089e62b12e) 
-> 
->! [image.png](https://atlas-rc.pingcode.com/files/public/60efe823f6d53dc7855c51c5/origin-url)
+
  
 让我们跳回到最坏的情况并检查每个 Item 到底消耗了多少内存。
 
@@ -282,11 +274,9 @@ Yjs 对性能的权衡是非常有利的。为了换取每次操作的少量内�
 
 如果你想了解更多关于 Yjs 的信息，请访问   [GitHub](https://github.com/yjs/yjs)   并在   [twitter](https://twitter.com/kevin_jahns)   上关注我，了解最新的发展。
 
-![image.png](https://atlas-rc.pingcode.com/files/public/60efae70f6d53d5ee85c518c/origin-url)
 
-维护 Yjs，关心 GitHub 问题，管理不断增长的社区占用了我大量的空闲时间。如果你想让我做更多的公共工作，比如写博客文章，那么请在 GitHub 上赞助  [我](https://github.com/sponsors/dmonad)  。
+维护 Yjs，关心 GitHub 问题，管理不断增长的社区占用了我大量的空闲时间。如果你想让我做更多的公共工作，比如写博客文章，那么请在 GitHub 上赞助 [我](https://github.com/sponsors/dmonad)  。
 
-![image.png](https://atlas-rc.pingcode.com/files/public/60effcb9f6d53d03f15c51d7/origin-url)
 
 在下一篇博文中，我将讨论 CRDT 增加应用程序复杂性的概念。 Yjs 有一个协作感知模型，该模型非常有助于在协作（富）文本文档上实现注释、共享光标、位置标记、状态或建议等功能。 实现像 Yjs 这样的 CRDT 并正确地进行优化并非易事。 我将讨论用于测试分布式系统的方法，这些方法使我对文档总是收敛有很高的信心。
 
@@ -302,6 +292,3 @@ Yjs 对性能的权衡是非常有利的。为了换取每次操作的少量内�
 
 - 2020/12/30 - 更新了关于  [从右到左书写系统](https://en.wikipedia.org/wiki/Right-to-left)  的论点。 以前，我担心 Yjs 在从右到左的书写系统（例如希伯来语和阿拉伯语）中不能很好地工作，因为复合优化仅适用于从左到右书写的文本。 但是一位用户通知我，即使使用的书写系统是从右到左，编辑器也始终按逻辑顺序（从左到右）存储文档内容。
 
-
-
-【 原文链接 】：   [https://blog.kevinjahns.de/are-crdts-suitable-for-shared-editing/](https://blog.kevinjahns.de/are-crdts-suitable-for-shared-editing/)  
