@@ -199,7 +199,7 @@ JavaScript 对象的工作方式类似于键值映射。 这意味着每个对�
 
 > [V8 如何优化 JavaScript 代码的简要概述](https://blog.sessionstack.com/how-javascript-works-inside-the-v8-engine-5-tips-on-how-to-write-optimized-code-ac089e62b12e) 
 > 
->! [image.png](https://atlas-rc.pingcode.com/files/public/60efe823f6d53dc7855c51c5/origin-url)
+>![image.png](https://atlas-rc.pingcode.com/files/public/60efe823f6d53dc7855c51c5/origin-url)
  
 让我们跳回到最坏的情况并检查每个 Item 到底消耗了多少内存。
 
