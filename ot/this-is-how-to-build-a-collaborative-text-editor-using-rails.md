@@ -1,5 +1,5 @@
 原文地址：  [https://www.aha.io/blog/text-editor](https://www.aha.io/blog/text-editor)  
-PingCode 分享地址：https://pingcode.com/pages/sNIdUxuT6L（github 部分图片无法查看）
+PingCode 分享地址：https://pingcode.com/pages/sNIdUxuT6L
 
 这是一个痛苦的认识。 您刚刚在错误跟踪器的文本编辑器中添加了一个漂亮的多页描述，并附有照片和一个简短的截屏视频。 然后你的同事在他们去吃午饭的时候把窗户开着，帮助修正了一个错字……并覆盖了你刚刚做的一切。 噗——所有这些工作都消失了。
 
