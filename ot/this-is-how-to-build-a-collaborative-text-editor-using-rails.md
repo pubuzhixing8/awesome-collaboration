@@ -419,47 +419,47 @@ end
 
 **协同 Undo**
 
-Just like with cursors, to figure out how to handle local undo, we have to understand how undo usually works. Remember, we are thinking in operations — “insert ‘a’ at position 3.”
+就像使用光标一样，要弄清楚如何处理本地撤消，我们必须了解撤消通常是如何工作的。 请记住，我们正在考虑操作——“在位置 3 插入‘a’。”
 
-How would you undo that? You would run the operation, “remove ‘a’ at position 3.” How would you redo? You would run the operation, “insert ‘a’ at position 3.”
+你会如何撤消那个？ 您将运行操作，“删除位置 3 处的‘a’。” 你会怎么重做？ 您将运行操作，“在位置 3 插入‘a’。”
 
-These two operations are inverses of each other — they cancel each other out. If you run an operation and then run its inverse, it is as though the original operation never happened. Which is exactly what you want with undo.
+这两个操作互为逆——它们相互抵消。 如果您运行一个操作，然后运行它的逆操作，就好像原始操作从未发生过一样。 这正是您想要撤消的内容。
 
-Undo also works like a stack. The last thing you did is the first thing you undo.
+撤消也像堆栈一样工作。 你做的最后一件事是你撤消的第一件事。
 
-So, if our text editor was not collaborative, here is how you would apply an operation with undo:
+因此，如果我们的文本编辑器不是协作式的，那么您将如何应用撤消操作：
 
-- You perform an operation, like “insert h before position 1.”
-- You invert that operation, so it becomes “remove h at position 1.”
-- Then, you push that inverted operation onto the undo stack.
-
-
-What about when you hit undo?
-
-- You pop the operation (“remove h at position 1”) off the stack.
-- You apply it as if you were performing it to begin with.
-- Then, if you want to support redo, you invert it again and push the inverse onto the redo stack.
+1. 您执行一个操作，例如“在位置 1 之前插入 h”。
+1. 你反转这个操作，所以它变成了“在位置 1 移除 h”。
+1. 然后，您将该反向操作推送到撤消堆栈上。
 
 
-Simple enough, right? Let’s see how that breaks when other people are collaborating with you. You run “insert s, 4” — that pushes “remove s, 4” onto the undo stack. And you send the insert to the server.
+当你点击撤消时呢？
+
+1. 您从堆栈中弹出操作（“删除位置 1 处的 h”）。
+1. 你应用它就像你开始执行它一样。
+1. 然后，如果您想支持重做，则再次将其反转并将反转推入重做堆栈。
+
+
+够简单了吧？ 让我们看看当其他人与您合作时，这种情况如何打破。 你运行“insert s, 4”——将“remove s, 4”压入撤销栈。 然后将插入内容发送到服务器。
 
 ![image.png](https://atlas-rc.pingcode.com/files/public/60ec3160f6d53dec385c506f/origin-url)
 
-A little bit later, the server sends you the operation, “insert h at 1” — this is not happening simultaneously, so you do not have to transform it. Now our state is “charts.”
+稍后，服务器向您发送操作“将 h 插入 1”——这不会同时发生，因此您不必对其进行转换。 现在我们的状态是下图。
 
 ![image.png](https://atlas-rc.pingcode.com/files/public/60ec317ff6d53d75d05c5070/origin-url)
 
-Now look at our undo stack. What would happen if you hit undo? You would run “remove s at 4” — but there is no “s” at position 4, right?
+现在看看我们的撤销堆栈。 如果你点击撤销会发生什么？ 你会运行“remove s at 4”——但在位置 4 没有“s”，对吧？
 
 ![image.png](https://atlas-rc.pingcode.com/files/public/60ec31eaf6d53dcb4b5c5071/origin-url)
 
-Clearly, we are missing a step. When you get the operation from the server, you need to transform all the operations in your undo stack against that operation. So, the undo stack is “remove s, 4.” We receive “insert h, 1″ and have to transform the undo stack so it looks like “remove s, 5.”
+显然，我们错过了一步。 当您从服务器获取操作时，您需要针对该操作转换撤消堆栈中的所有操作。 因此，撤消堆栈是“remove s, 4”。 我们收到“insert h, 1”并且必须转换撤消堆栈，使其看起来像“remove s, 5”。
 
-Now, when we undo, we run “remove s at 5” it deletes the “s” at position 5 and everything is great.
+现在，当我们撤消时，我们运行“remove s at 5”，它会删除位置 5 处的“s”，一切都很好。
 
-When you receive an operation, you have to transform the undo stack against that operation. Luckily, we already have a function (that big transform one from earlier) that is really good at transforming lists of operations against other lists of operations.
+当您收到一个操作时，您必须针对该操作转换撤消堆栈。 幸运的是，我们已经有了一个函数（之前的那个大转换），它非常擅长将操作列表转换为其他操作列表。
 
-We can just use this:
+我们可以这样使用：
 
 ```
 def transform_stacks(remote_op)
@@ -468,74 +468,73 @@ def transform_stacks(remote_op)
 end
 ```
 
-Here is how collaborative local undo would work then:
+以下是协作本地撤消的工作方式：
 
-- When you perform an operation, invert it and push it on the stack.
-- When you receive an operation, transform the stack against it.
-- When you undo, pop the top item off the stack and run it, sending it to the collaboration server.
-
-
-This mostly works, but it is not perfect. In fact, it can violate some rules that you should have with undo. For example, if every client undoes a set of operations and then redoes them, the document should be in the same state as it was originally. Sometimes, with this method, it is not.
-
-But this is a pragmatic balance between complexity and good-enough behavior. And I am not the only one who thinks so — almost all collaborative text editors that I have used, including Google Docs, can fail undo in the exact same ways.
-
-Putting it all together
-
-The following is enough to make collaboration work with any kind of app. You start with a document, which can be as simple of an array of things, a version, a cursor, a list of remote cursors, and an undo stack. You have operations that act on that state, such as insert character and remove character. These operations know which version of the document they came from.
-
-You have a set of transformation functions, which take two operations that happened at the same time and transform them so they can be run one after the other.
-
-You have a control algorithm, which can take two lists of operations and transform each side against each other to come up with documents that end up in the same place. You have functions to transform cursors and functions to send and receive cursors, transforming them on the way in.
-
-And you have an undo stack and a redo stack, which hold inverted operations that get transformed whenever a remote operation comes in.
-
-When you perform an operation, you:
-
-- Apply it to your document.
-- Transform all the cursors against it.
-- Send it to the server.
-- Send your current selection once everything calms down.
+1. 当您执行一个操作时，将其反转并将其压入堆栈。
+1. 当您收到一个操作时，根据它转换堆栈。
+1. 撤消时，从堆栈中弹出顶部项目并运行它，将其发送到协作服务器。
 
 
-When you receive an operation, you:
+这大部分情况是有效的，但并不完美。 事实上，它可能会违反一些您在撤销时应该遵守的规则。 例如，如果每个客户端都撤消了一组操作，然后重做，则文档应该处于与原始状态相同的状态。 有时，使用这种方法，它不是。
 
-- Transform your pending operations against it to complete the transformation square.
-- Apply the transformed operation to your document, and send your pending transformed operations to the server.
-- Transform all the cursors you know about against the operation you received and transformed.
-- Transform your undo stack against it as well.
+但这是复杂性和足够好的行为之间的务实平衡。 而且我不是唯一一个这么认为的人——我使用过的几乎所有协作文本编辑器，包括 Google Docs，都可能以完全相同的方式撤消失败。
 
+**把这一切放在一起**
 
-When you change your cursor position and you have no pending operations:
+以下内容足以使协作与任何类型的应用程序一起工作。 您从一个文档开始，它可以是一个简单的数组、一个版本、一个光标、一个远程光标列表和一个撤消堆栈。 您有对该状态起作用的操作，例如插入字符和删除字符。 这些操作知道它们来自文档的哪个版本。
 
-- Send your current cursor position.
+您有一组转换函数，它们接受同时发生的两个操作并转换它们，以便它们可以一个接一个地运行。
 
+您有一个控制算法，它可以采用两个操作列表，并将每一侧相互转换，以生成最终位于同一位置的文档。 你有转换光标的函数和发送和接收光标的函数，在输入的过程中转换它们。
 
-When you get a cursor from someone else:
+并且您有一个撤消堆栈和一个重做堆栈，它们包含在远程操作进入时转换的反向操作。
 
-- If the cursor is for an older version of the document, either ignore it, or transform it up to your current version.
-- If it is for the current version of the document, transform it against any pending operations.
-- If it is for a future version of the document, either ignore it or hold onto it until you see that version of the document.
+当您执行操作时，您：
 
-
-I have a   [demo](http://justinweiss-editor.herokuapp.com/)   that puts all this together, which you can play with.
-
-Where to go next
-
-There are a lot of ways to build collaborative applications, but this is a good one to start with. It works for all different kinds of apps, it is not too hard to build, and it is extremely flexible. It is a model you will see a lot of companies use.
-
-But it is not perfect because:
-
-- This model needs a server to work.
-- There are some edge cases, especially around undo, that would add a lot of complexity if you want to fix them.
-- Depending on what you are building, there are other collaboration methods that might be easier or more correct.
+- 将其应用于您的文档。
+- 针对它变换所有光标。
+- 将其发送到服务器。
+- 一旦一切平静下来，发送您当前的选取。
 
 
-If you want to build peer-to-peer collaboration that does not rely on a central server, take a look into conflict-free replicated data types (CRDTs). Same thing if you are just dealing with plain text — CRDTs tend to be great at that. CRDTs are newer collaboration methods that fit some specific kinds of text editors really well and they are getting even better.
+当您接收操作时，您：
 
-If you are using operational transformation and you do not want to write the server or control algorithm yourself, take a look at   [ShareDB](https://github.com/share/sharedb)  . If you want to check out CRDTs,   [Y.js](http://y-js.org/)  ,   [Gun](https://gun.eco/)  , and   [Automerge](https://github.com/automerge/automerge)   are all really cool projects.
+- 针对它转换您的待处理操作以完成转换方块。
+- 将转换后的操作应用到您的文档，并将待处理的转换操作发送到服务器。
+- 根据您收到和转换的操作转换您知道的所有光标。
+- 也可以针对它转换您的撤消堆栈。
 
 
-现在，我喜欢我们可以在 Aha 完成我们的工作！ 远程。 团队中的每个人都在家庭办公室工作——整个公司是完全分布式的。 我喜欢远程工作变得越来越流行。
+当您更改光标位置并且没有挂起的操作时：
+
+- 发送您当前的光标位置。
+
+
+当你从别人那里得到光标时：
+
+- 如果光标指向文档的旧版本，请忽略它，或将其转换为当前版本。
+- 如果是针对文档的当前版本，则针对任何挂起的操作对其进行转换。
+- 如果它用于文档的未来版本，请忽略它或保留它直到您看到文档的该版本。
+
+
+我有一个将所有这些放在一起的   [demo](http://justinweiss-editor.herokuapp.com/)  ，您可以使用它。
+
+**下一步做什么**
+
+构建协作应用程序的方法有很多，但这是一个很好的开始。 它适用于所有不同类型的应用程序，构建起来并不难，而且非常灵活。 您会看到很多公司都在使用这种模型。
+
+但它并不完美，因为：
+
+- 这个模型需要一个服务器才能工作。
+- 有一些边缘情况，特别是在撤销方面，如果你想修复它们会增加很多复杂性。
+- 根据您正在构建的内容，还有其他可能更简单或更正确的协作方法。
+
+
+如果您想构建不依赖中央服务器的对等协作，请查看无冲突复制数据类型 (CRDT)。 如果你只是处理纯文本，也是一样——CRDT 在这方面往往做得很好。 CRDT 是较新的协作方法，非常适合某些特定类型的文本编辑器，并且它们变得越来越好。
+
+如果您正在使用操作转换并且您不想自己编写服务器或控制算法，请查看   [ShareDB](https://github.com/share/sharedb)  。 如果您想查看 CRDT，  [Yjs](https://github.com/yjs/yjs)  、  [Gun](https://gun.eco/)   和   [Automerge](https://github.com/automerge/automerge)   都是非常酷的项目。
+
+现在，我喜欢我们可以在   [Aha](https://www.aha.io/company/careers)   完成我们的工作！ 远程。 团队中的每个人都在家庭办公室工作——整个公司是完全分布式的。 我喜欢远程工作变得越来越流行。
 
 这也让一些事情变得更加困难。 在一个项目上一起工作可能很困难。 最糟糕的是，当事情变得困难时，这些项目有时根本不会产生。 我喜欢能够让一个团队聚在一起完成比我们自己更大的事情。 但我不想担心做一个小的改变会破坏你的大事。
 
@@ -543,6 +542,6 @@ If you are using operational transformation and you do not want to write the ser
 
 我有信心做出改变，因为我的贡献不会与你的冲突。 我希望这种魔法无处不在，即使我不一直使用它。 因为在同一件事上工作的两个人应该让它变得更好，而不是更糟。
 
-Ever since I joined the Aha! team, I have worked on some truly interesting projects. And I have only worked on a few of the many, many, many interesting projects we have going on at Aha!
+自从我加入了 Aha!！ 在这个团队，我曾参与过一些真正有趣的项目。 我只参与了我们在 Aha 进行的许多许多有趣项目中的几个！
 
-So you like solving cool problems for great customers and you want to work for a fast-growing, remote, and profitable software company?   [We are hiring](https://www.aha.io/company/careers/current-openings)   and I would love to collaborate with you.
+因此，您喜欢为大客户解决很酷的问题，并且想为一家快速发展、远程且盈利的软件公司工作？   [我们正在招聘](https://www.aha.io/company/careers/current-openings)  ，我很乐意与您合作。
