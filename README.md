@@ -13,4 +13,4 @@
 # OT
 [SharedPen 之 Operational Transformation](https://objcer.com/2018/03/05/SharePen-Operational-Transformation/)
 
-[（翻译）这是使用 Rails 构建协作文本编辑器的方法](https://github.com/pubuzhixing8/awesome-collaboration/blob/master/ot/this-is-how-to-build-a-collaborative-text-editor-using-rails.md)
+[(翻译) 这是使用 Rails 构建协作文本编辑器的方法](https://github.com/pubuzhixing8/awesome-collaboration/blob/master/ot/this-is-how-to-build-a-collaborative-text-editor-using-rails.md)
