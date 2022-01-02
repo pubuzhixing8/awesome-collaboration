@@ -9,6 +9,8 @@
 
 [(翻译) CRDT 是否适合协同编辑？](https://github.com/pubuzhixing8/awesome-collaboration/blob/master/crdt/yjs/are-crdts-suitable-for-shared-editing.md)
 
+[(翻译) CRDTs 速度提高 5000x：优化挑战](https://github.com/pubuzhixing8/awesome-collaboration/blob/master/crdt/5000x-faster-crdts-an-adventure-in-optimization.md)
+
 
 # OT
 [SharedPen 之 Operational Transformation](https://objcer.com/2018/03/05/SharePen-Operational-Transformation/)
