@@ -1,4 +1,20 @@
-原文地址：  [https://josephg.com/blog/crdts-go-brrr/](https://josephg.com/blog/crdts-go-brrr/)   作者：josephg
+> 原文地址：  [https://josephg.com/blog/crdts-go-brrr/](https://josephg.com/blog/crdts-go-brrr/)    作者：  [Seph Gentle](https://github.com/josephg)  （知名开源框架 sharedb/ottypes 作者）
+
+译者简评：
+
+这是一篇介绍  CRDTs 数据结构及对应算法优化的文章，基于主流开源框架：  [automerge](https://github.com/automerge/automerge)  、  [yjs](https://github.com/yjs/yjs)   展开，后面介绍作者在它们之上所做的一些创造性的优化:   [diamond-types](https://github.com/josephg/diamond-types)  ，是一篇非常有深度的文章。
+
+第一部分：主要介绍了 automerge 在数据结构及算法在性能上的一些核心问题，以及当下它为什么没有很快被解决。
+
+第二部分：重点阐述了 Yjs 双向链表数据结构选择解决的问题及性能的掣肘，以及 Yjs 所做的一些创造性的优化。
+
+第三部分：重点分享了作者本人在 Rust 上基于 b-trees 数据结构设计的 CRDTs 的实现，在一些性能表现上比 Yjs 的实现版本要快 5x 之多。
+
+同时作者罗列并且盛赞 Yjs 、automerge 所作出的一些创作性贡献，字里行间让人动容，称自己的 diamond-types 是站在巨人的肩膀上，并且建议当下如果有协同编辑的需求，可以选择生态完善，性能俱佳的 Yjs。
+
+
+
+**以下为正文。**
 
 几年前，我真的被一篇学术论文所困扰。
 
